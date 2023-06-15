@@ -82,26 +82,34 @@ class MyApp(QWidget):
         }
 
         file_ext = '.json' if format_type in ["Labelme2YOLO", "Labelme2Hubble"] else '.txt'
-        self.process_files(file_ext, conversion_funcs[format_type], converted_files)
+        self.process_files(file_ext, conversion_funcs[format_type], converted_files, format_type)
 
-    def process_files(self, file_ext, conversion_func, converted_files):
+    def process_files(self, file_ext, conversion_func, converted_files, format_type):
         for dir_name in self.class_list:
             subdir_path = os.path.join(self.directory, dir_name)
             hubble_path = os.path.join(subdir_path, "hubble_json")
             
-            os.makedirs(hubble_path, exist_ok=True)
-            
+            if format_type == "Labelme2Hubble":
+                os.makedirs(hubble_path, exist_ok=True)
+
             file_list = [f for f in os.listdir(subdir_path) if f.endswith(file_ext)]
 
             for file_name in file_list:
                 file_path = os.path.join(subdir_path, file_name)
-                with open(file_path, 'r') as file:
-                    data = json.load(file)
-
+                
+                data = self.load_file(file_ext, file_path)
                 conversion_func(data, file_path)
                 converted_files[dir_name] += 1
 
         self.lbl_status.setText(f"Conversion complete. Class-wise counts: {converted_files}")
+
+    def load_file(self, file_ext, file_path):
+        if file_ext == ".json":
+            with open(file_path, 'r') as file:
+                return json.load(file)
+        else:
+            with open(file_path, 'r') as file:
+                return file.read()
 
     def format_to_yolo(self, data, file_path):
         labelme2yolo(data, file_path, self.class_list)
@@ -110,7 +118,7 @@ class MyApp(QWidget):
         labelme2hubble(data, file_path, self.class_list)
 
     def format_to_labelme(self, data, file_path):
-        yolo2labelme(data, file_path, self.class_list)
+        yolo2labelme(file_path, self.class_list)
 
 
 if __name__ == '__main__':

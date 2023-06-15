@@ -74,7 +74,7 @@ def yolo2labelme(file_path, class_list):
         with open(txt_file_path, 'r') as f:
             yolo_lines = f.readlines()
 
-        label_dict = {class_list[i]: i for i in range(len(class_list))}
+        label_dict = {class_list[i]: int(i) for i in range(len(class_list))}
         img = cv2.imread(img_file_path)
         height, width, channels = img.shape
 
@@ -91,7 +91,6 @@ def yolo2labelme(file_path, class_list):
 
         for line in yolo_lines:
             label, x_center, y_center, box_width, box_height = line.strip().split(' ')
-
             x_center, y_center, box_width, box_height = map(
                 float, (x_center, y_center, box_width, box_height))
             x1 = (x_center - box_width / 2) * width
