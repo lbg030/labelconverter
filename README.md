@@ -63,3 +63,6 @@
 📝 예시:
 - 디렉토리를 불러온 결과 (`os.listdir()`) : `['bear', 'dog', 'cat']` 📂
 - 이에 번호를 매긴 `yolo_label` : `{'bear' : 0, 'cat' : 1, 'dog' : 2}` 🏷️
+
+## 📥 다운로드
+LabelConverter의 최신 버전을 다운로드하려면 [여기](https://github.com/lbg030/labelconverter/releases/latest)를 클릭하세요.
