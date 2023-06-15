@@ -96,9 +96,15 @@ class MyApp(QWidget):
     def process_files(self, file_ext, conversion_func, converted_files):
         for dir_name in self.class_list:
             subdir_path = os.path.join(self.directory, dir_name)
+            
+            if not os.path.exists(f"{subdir_path}/hubble_json/"):
+                os.makedirs(f"{subdir_path}/hubble_json/")
+
+            
             file_list = [f for f in os.listdir(
                 subdir_path) if f.endswith(file_ext)]
 
+            
             for file_name in file_list:
                 file_path = os.path.join(subdir_path, file_name)
                 with open(file_path, 'r') as file:

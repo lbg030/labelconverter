@@ -2,27 +2,29 @@ import json
 import cv2
 import os
 
-# from PIL import Image
-# from pathlib import Path
-# import sys
-
 def labelme2hubble(json_data, file_name, class_list = None):
     '''
     #TODO: Hubble Json은 이름이 동일해야 됨.
         --> 따라서 차라리 폴더를 하나 만들어서 거기에 Hubble Json을 넣어야 할 것 같음
     '''
     boxes = json_data['shapes']
+    
     hubble_set = list(dict() for _ in range(len(boxes)))
     for ind in range(len(boxes)):
         hubble_set[ind]['defectTypeName'] = boxes[ind]['label']
-        ul = boxes[ind]['points'][0]
-        br = boxes[ind]['points'][1]
-        ur = [br[0], ul[1]]
-        bl = [ul[0], br[1]]
-        hubble_set[ind]['data'] = {'coordinateList' : [ul, ur, br, bl]}
-    with open(file_name, 'w') as w_file:
-        json.dump(hubble_set, w_file, indent = 4)
+        ul = list(map(int, boxes[ind]['points'][0]))
+        br = list(map(int, boxes[ind]['points'][1]))
 
+        ur = [int(br[0]), int(ul[1])]
+        bl = [int(ul[0]), int(br[1])]
+        hubble_set[ind]['data'] = {'coordinateList' : [ul, ur, br, bl]}
+    
+    # new_file_name = ''.join(file_name).split('/')[:-1] + "/hubble_json/" + file_name[-1]
+    new_file_name = '/'.join(file_name.split('/')[:-1]) + "/hubble_json/" + file_name.split('/')[-1]
+    # with open(file_name, 'w') as w_file:
+    #     json.dump(hubble_set, w_file, indent = 4)
+    with open(new_file_name, 'w') as w_file:
+        json.dump(hubble_set, w_file, indent = 4)
 
 def labelme2yolo(data, file_path, class_list):
     '''
