@@ -1,12 +1,16 @@
 import json
-from PIL import Image
-from pathlib import Path
-import sys
 import cv2
 import os
 
+# from PIL import Image
+# from pathlib import Path
+# import sys
 
 def labelme2hubble(json_data, file_name, class_list = None):
+    '''
+    #TODO: Hubble Json은 이름이 동일해야 됨.
+        --> 따라서 차라리 폴더를 하나 만들어서 거기에 Hubble Json을 넣어야 할 것 같음
+    '''
     boxes = json_data['shapes']
     hubble_set = list(dict() for _ in range(len(boxes)))
     for ind in range(len(boxes)):
@@ -19,7 +23,13 @@ def labelme2hubble(json_data, file_name, class_list = None):
     with open(file_name, 'w') as w_file:
         json.dump(hubble_set, w_file, indent = 4)
 
+
 def labelme2yolo(data, file_path, class_list):
+    '''
+    yolo인 경우 txt파일로 나오기 때문에 큰 상관은 없을 것 같음
+        --> 닉변 안해도 됨
+    '''
+
     def convert(label, size, box):
         c = label
         dw = 1./size[0]
@@ -51,10 +61,14 @@ def labelme2yolo(data, file_path, class_list):
             xmax = max(points[0][0], points[1][0])
             ymax = max(points[0][1], points[1][1])
 
-            im = Image.open(str(path))
 
-            w = int(im.size[0])
-            h = int(im.size[1])
+            # deprecated variables
+            # im = Image.open(str(path))
+            # w = int(im.size[0])
+            # h = int(im.size[1])
+
+            w = int(data['imageWidth'])
+            h = int(data['imageHeight'])
 
             # print(xmin, xmax, ymin, ymax) #define your x,y coordinates
             b = (xmin, xmax, ymin, ymax)
@@ -78,10 +92,14 @@ def labelme2yolo(data, file_path, class_list):
 
         print(str(path))
 
-        im = Image.open(str(path))
 
-        w = int(im.size[0])
-        h = int(im.size[1])
+        # deprecated variables
+        # im = Image.open(str(path))
+        # w = int(im.size[0])
+        # h = int(im.size[1])
+
+        w = int(data['imageWidth'])
+        h = int(data['imageHeight'])
 
         # print(xmin, xmax, ymin, ymax) #define your x,y coordinates
         b = (xmin, xmax, ymin, ymax)
@@ -93,7 +111,12 @@ def labelme2yolo(data, file_path, class_list):
 
     return defect_label
 
+
 def yolo2labelme(file_path, class_list):
+    '''
+    yolo에서 닉변을 안하기 때문에 얘도 그대로 이름 갖다 써도 됨.
+        --> 닉변 안해도 됨
+    '''
     def convert_yolo_to_labelme(txt_file_path, img_file_path, labelme_file_path):
         with open(txt_file_path, 'r') as f:
             yolo_lines = f.readlines()
