@@ -34,7 +34,7 @@
     ![Screenshot](./assets/init.PNG)
 
 2. Format Type에서 원하는 형식을 설정합니다.  
-    ![Screenshot](./assets/format.PNG)
+    ![Screenshot](./assets/format.png)
 
 3. `Select Directory` 버튼을 클릭하여 변환하려는 폴더로 이동합니다. 단, 클래스 이름이 존재하는 폴더로 이동해야 합니다.
     - 예시: 아래와 같은 폴더 구조가 있다면, `Animal` 폴더를 선택해야 합니다.
@@ -50,7 +50,7 @@
     ```
 
     - 스크린샷 예시:  
-    ![Screenshot](./assets/folder_select.PNG)
+    ![Screenshot](./assets/folder_select.png)
 
 4. `Convert format` 버튼을 클릭하여 원하는 형식으로 변경합니다.  
 
